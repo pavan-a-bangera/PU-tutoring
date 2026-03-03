@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PU Elite Tutoring - Science & Commerce Classes</title>
+  <title>AMMA Tutors — Empowering Grades 6–10 | Live Tuition & Combo Packs</title>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -232,11 +232,11 @@
       return (
         <div className="app">
           <nav className="nav">
-            <div className="nav-brand">PU <span>Elite</span></div>
+            <div className="nav-brand">AMMA <span>Tutors</span> 6-10</div>
             <div className="nav-links">
               <button className={`nav-link ${path === '#/' ? 'active' : ''}`} onClick={() => navigate('#/')}>Home</button>
-              <button className={`nav-link ${path === '#/streams' ? 'active' : ''}`} onClick={() => navigate('#/streams')}>Streams</button>
-              <button className={`nav-link ${path === '#/courses' ? 'active' : ''}`} onClick={() => navigate('#/courses')}>Classes</button>
+              <button className={`nav-link ${path === '#/subjects' ? 'active' : ''}`} onClick={() => navigate('#/subjects')}>Subjects</button>
+              <button className={`nav-link ${path === '#/combos' ? 'active' : ''}`} onClick={() => navigate('#/combos')}>Combo Packs</button>
               <button className="nav-link cta" onClick={() => navigate('#/enroll')}>Enroll Now</button>
             </div>
           </nav>
@@ -245,34 +245,34 @@
             {path === '#/' && (
               <>
                 <section className="hero">
-                  <div className="hero-badge">🎓 Ace Your Pre-University Exams</div>
-                  <h1>Master Science & Commerce <em>with Expert Guidance</em></h1>
-                  <p>Comprehensive PU tutoring classes for both Science and Commerce streams. Learn from experienced educators and excel in your board exams.</p>
+                  <div className="hero-badge">🎓 Empowering Them With Knowledge</div>
+                  <h1>All Subjects Covered <em>for Grades 6 through 10</em></h1>
+                  <p>One-on-one and group tuition across Mathematics, Science, English, Social Studies, and languages. Fixed price per subject with combo packs by grade.</p>
                   <div className="hero-btns">
-                    <button className="btn-primary">Browse Classes</button>
-                    <button className="btn-outline">Contact Us</button>
+                    <button className="btn-primary">See Subjects</button>
+                    <button className="btn-outline">Learn More</button>
                   </div>
                 </section>
 
                 <div className="stats-bar">
                   <div className="stat-item">
-                    <div className="stat-num">15+</div>
-                    <div className="stat-label">Expert Teachers</div>
+                    <div className="stat-num">20+</div>
+                    <div className="stat-label">Qualified Tutors</div>
                   </div>
                   <div className="stat-item">
-                    <div className="stat-num">2000+</div>
-                    <div className="stat-label">Successful Students</div>
+                    <div className="stat-num">3000+</div>
+                    <div className="stat-label">Happy Learners</div>
                   </div>
                   <div className="stat-item">
-                    <div className="stat-num">95%</div>
-                    <div className="stat-label">Pass Rate</div>
+                    <div className="stat-num">98%</div>
+                    <div className="stat-label">Success Rate</div>
                   </div>
                 </div>
 
                 <section className="section">
                   <div className="section-inner">
                     <div className="section-tag">Why Choose Us</div>
-                    <h2 className="section-title">Why PU Elite Stands Out?</h2>
+                    <h2 className="section-title">Why Choose AMMA Tutors for 6‑10?</h2>
                     <div className="features-grid">
                       <div className="feature-card">
                         <div className="feature-icon">👨‍🏫</div>
@@ -287,7 +287,7 @@
                       <div className="feature-card">
                         <div className="feature-icon">✅</div>
                         <h3>High Success Rate</h3>
-                        <p>95% of our students score above 80% in board exams. Join the winning tradition.</p>
+                        <p>Most students achieve top grades in board exams through our structured program.</p>
                       </div>
                     </div>
                   </div>
@@ -295,42 +295,30 @@
               </>
             )}
 
-            {path === '#/streams' && (
+            {path === '#/subjects' && (
               <section className="section">
                 <div className="section-inner">
-                  <h2 className="section-title">Our Streams</h2>
-                  <p className="section-sub">Choose your stream and excel with specialized guidance for Science and Commerce.</p>
+                  <h2 className="section-title">Choose a Subject</h2>
+                  <p className="section-sub">Each subject priced at ₹1,000/month. Pick what you need, or opt for full-package combos.</p>
                   <div className="courses-grid" style={{marginTop: '3rem'}}>
                     <div className="course-card">
-                      <div className="course-card-header" style={{background: 'linear-gradient(135deg, #0A4A8C, #1B70F0)'}}>
-                        <h3>Science Stream</h3>
-                        <p>For students pursuing STEM fields</p>
+                      <div className="course-card-header" style={{background: 'linear-gradient(135deg, #4a90e2, #50e3c2)'}}>
+                        <h3>Mathematics</h3>
+                        <p>All grades 6–10</p>
                       </div>
                       <div className="course-card-body">
-                        <div className="course-subjects">
-                          <span className="subject-chip">Physics</span>
-                          <span className="subject-chip">Chemistry</span>
-                          <span className="subject-chip">Biology</span>
-                          <span className="subject-chip">Maths</span>
-                        </div>
-                        <p style={{fontSize: '0.9rem', color: 'var(--slate)', marginBottom: '1rem'}}>Complete PU Science curriculum with lab practical guidance and problem-solving sessions.</p>
-                        <button className="course-enroll">Explore Science Classes</button>
+                        <p style={{fontSize: '0.9rem', color: 'var(--slate)', marginBottom: '1rem'}}>Algebra, Geometry, Arithmetic & more. ₹1,000/month per subject.</p>
+                        <button className="course-enroll">Enroll in Maths</button>
                       </div>
                     </div>
                     <div className="course-card">
-                      <div className="course-card-header" style={{background: 'linear-gradient(135deg, #8B4513, #D4A574)'}}>
-                        <h3>Commerce Stream</h3>
-                        <p>For business and economics aspirants</p>
+                      <div className="course-card-header" style={{background: 'linear-gradient(135deg, #f5a623, #f8e71c)'}}>
+                        <h3>Science</h3>
+                        <p>Physics, Chemistry, Biology</p>
                       </div>
                       <div className="course-card-body">
-                        <div className="course-subjects">
-                          <span className="subject-chip">Accountancy</span>
-                          <span className="subject-chip">Economics</span>
-                          <span className="subject-chip">Business St.</span>
-                          <span className="subject-chip">Maths</span>
-                        </div>
-                        <p style={{fontSize: '0.9rem', color: 'var(--slate)', marginBottom: '1rem'}}>PU Commerce classes with practical accounting case studies and economic analysis.</p>
-                        <button className="course-enroll">Explore Commerce Classes</button>
+                        <p style={{fontSize: '0.9rem', color: 'var(--slate)', marginBottom: '1rem'}}>₹1,000/month per science subject.</p>
+                        <button className="course-enroll">Enroll in Science</button>
                       </div>
                     </div>
                   </div>
@@ -338,108 +326,25 @@
               </section>
             )}
 
-            {path === '#/courses' && (
+            {path === '#/combos' && (
               <section className="section">
                 <div className="section-inner">
-                  <h2 className="section-title">Our Classes</h2>
-                  <p className="section-sub">Comprehensive PU preparation classes across both streams</p>
+                  <h2 className="section-title">Grade Combo Packs</h2>
+                  <p className="section-sub">All-subject bundles for each class (6–10). Enjoy discounted pricing.</p>
                   <div className="courses-grid">
-                    <div className="course-card">
-                      <div className="course-card-header" style={{background: 'linear-gradient(135deg, #0A4A8C, #1B70F0)'}}>
-                        <div className="course-badge">SCIENCE</div>
-                        <h3>Physics</h3>
-                        <p>Mechanics, Thermodynamics & More</p>
-                      </div>
-                      <div className="course-card-body">
-                        <div className="course-subjects">
-                          <span className="subject-chip">Mechanics</span>
-                          <span className="subject-chip">Optics</span>
-                          <span className="subject-chip">Modern Physics</span>
+                    {['6th Grade','7th Grade','8th Grade','9th Grade','10th Grade'].map((grade,index)=>(
+                      <div className="course-card" key={index}>
+                        <div className="course-card-header" style={{background: ['linear-gradient(135deg, #4a90e2, #50e3c2)','linear-gradient(135deg, #f5a623, #f8e71c)','linear-gradient(135deg, #7b4397, #dc2430)','linear-gradient(135deg, #00b09b, #96c93d)','linear-gradient(135deg, #ee9ca7, #ffdde1)'][index]}}>
+                          <h3>{grade} Pack</h3>
+                          <p>All subjects included</p>
                         </div>
-                        <div className="course-price">₹4000<span>/month</span></div>
-                        <button className="course-enroll">Enroll</button>
-                      </div>
-                    </div>
-                    <div className="course-card">
-                      <div className="course-card-header" style={{background: 'linear-gradient(135deg, #0A4A8C, #1B70F0)'}}>
-                        <div className="course-badge">SCIENCE</div>
-                        <h3>Chemistry</h3>
-                        <p>Organic, Inorganic & Physical</p>
-                      </div>
-                      <div className="course-card-body">
-                        <div className="course-subjects">
-                          <span className="subject-chip">Organic</span>
-                          <span className="subject-chip">Inorganic</span>
-                          <span className="subject-chip">Physical</span>
+                        <div className="course-card-body">
+                          <p style={{fontSize: '0.9rem', color: 'var(--slate)', marginBottom: '1rem'}}>Complete {grade} curriculum covering Maths, Science, English, Social Studies & languages.</p>
+                          <div className="course-price">₹{3000+index*500}<span>/month</span></div>
+                          <button className="course-enroll">Buy {grade} Pack</button>
                         </div>
-                        <div className="course-price">₹4000<span>/month</span></div>
-                        <button className="course-enroll">Enroll</button>
                       </div>
-                    </div>
-                    <div className="course-card">
-                      <div className="course-card-header" style={{background: 'linear-gradient(135deg, #0A4A8C, #1B70F0)'}}>
-                        <div className="course-badge">SCIENCE</div>
-                        <h3>Biology</h3>
-                        <p>Botany, Zoology & Ecology</p>
-                      </div>
-                      <div className="course-card-body">
-                        <div className="course-subjects">
-                          <span className="subject-chip">Botany</span>
-                          <span className="subject-chip">Zoology</span>
-                          <span className="subject-chip">Ecology</span>
-                        </div>
-                        <div className="course-price">₹3500<span>/month</span></div>
-                        <button className="course-enroll">Enroll</button>
-                      </div>
-                    </div>
-                    <div className="course-card">
-                      <div className="course-card-header" style={{background: 'linear-gradient(135deg, #8B4513, #D4A574)'}}>
-                        <div className="course-badge">COMMERCE</div>
-                        <h3>Accountancy</h3>
-                        <p>Journal, Ledger & Financial Statements</p>
-                      </div>
-                      <div className="course-card-body">
-                        <div className="course-subjects">
-                          <span className="subject-chip">Fundamentals</span>
-                          <span className="subject-chip">Final Accounts</span>
-                          <span className="subject-chip">Ratios</span>
-                        </div>
-                        <div className="course-price">₹4000<span>/month</span></div>
-                        <button className="course-enroll">Enroll</button>
-                      </div>
-                    </div>
-                    <div className="course-card">
-                      <div className="course-card-header" style={{background: 'linear-gradient(135deg, #8B4513, #D4A574)'}}>
-                        <div className="course-badge">COMMERCE</div>
-                        <h3>Economics</h3>
-                        <p>Micro & Macro Economics</p>
-                      </div>
-                      <div className="course-card-body">
-                        <div className="course-subjects">
-                          <span className="subject-chip">Demand-Supply</span>
-                          <span className="subject-chip">Money & Banking</span>
-                          <span className="subject-chip">Income</span>
-                        </div>
-                        <div className="course-price">₹3500<span>/month</span></div>
-                        <button className="course-enroll">Enroll</button>
-                      </div>
-                    </div>
-                    <div className="course-card">
-                      <div className="course-card-header" style={{background: 'linear-gradient(135deg, #8B4513, #D4A574)'}}>
-                        <div className="course-badge">COMMERCE</div>
-                        <h3>Business Studies</h3>
-                        <p>Management & Entrepreneurship</p>
-                      </div>
-                      <div className="course-card-body">
-                        <div className="course-subjects">
-                          <span className="subject-chip">Org. Structure</span>
-                          <span className="subject-chip">Finance</span>
-                          <span className="subject-chip">Marketing</span>
-                        </div>
-                        <div className="course-price">₹3500<span>/month</span></div>
-                        <button className="course-enroll">Enroll</button>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </section>
@@ -448,7 +353,7 @@
             {path === '#/enroll' && (
               <section className="section">
                 <div className="section-inner">
-                  <h2 className="section-title">Enroll in PU Elite</h2>
+                  <h2 className="section-title">Enroll in AMMA Tutors</h2>
                   <p className="section-sub">Join 2000+ successful students. Limited seats available in each batch.</p>
                   <div style={{maxWidth: '600px', margin: '3rem auto', background: 'var(--white)', padding: '2rem', borderRadius: 'var(--radius)', border: '1px solid var(--border)'}}>
                     <div style={{marginBottom: '1.5rem'}}>
@@ -460,12 +365,19 @@
                       <input type="email" placeholder="your@email.com" style={{width: '100%', padding: '0.75rem', border: '1px solid var(--border)', borderRadius: '8px', boxSizing: 'border-box'}} />
                     </div>
                     <div style={{marginBottom: '1.5rem'}}>
-                      <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: '600'}}>Select Stream</label>
+                      <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: '600'}}>Select Grade</label>
                       <select style={{width: '100%', padding: '0.75rem', border: '1px solid var(--border)', borderRadius: '8px', boxSizing: 'border-box'}}>
-                        <option>Choose your stream...</option>
-                        <option>Science</option>
-                        <option>Commerce</option>
+                        <option>Choose grade...</option>
+                        <option>6th</option>
+                        <option>7th</option>
+                        <option>8th</option>
+                        <option>9th</option>
+                        <option>10th</option>
                       </select>
+                    </div>
+                    <div style={{marginBottom: '1.5rem'}}>
+                      <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: '600'}}>Subject or Pack</label>
+                      <input type="text" placeholder="e.g. Mathematics or 8th Grade Pack" style={{width: '100%', padding: '0.75rem', border: '1px solid var(--border)', borderRadius: '8px', boxSizing: 'border-box'}} />
                     </div>
                     <button className="btn-primary" style={{width: '100%'}}>Submit Enrollment</button>
                   </div>
