@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PU Elite Tutoring - Science & Commerce Classes</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // ─── Router simulation (hash-based, no external deps) ───────────────────────
+    function useRouter() {
+      const [path, setPath] = useState(window.location.hash || "#/");
+      const navigate = (to) => {
+        window.location.hash = to;
+        setPath(to);
+      };
+      window.onhashchange = () => setPath(window.location.hash);
+      return { path, navigate };
+    }
+
+    // ─── Design tokens ───────────────────────────────────────────────────────────
+    const styles = `
+      @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --navy: #0A1628;
+        --blue: #1B4FD8;
+        --blue-light: #3B6EF0;
+        --gold: #F0A500;
+        --gold-light: #FFD166;
+        --cream: #FAFAF7;
+        --slate: #64748B;
+        --white: #FFFFFF;
+        --card-bg: #FFFFFF;
+        --border: #E2E8F0;
+        --font-display: 'Playfair Display', serif;
+        --font-body: 'DM Sans', sans-serif;
+        --radius: 12px;
+        --shadow: 0 4px 24px rgba(10,22,40,0.10);
+        --shadow-lg: 0 12px 40px rgba(10,22,40,0.15);
+      }
+
+      body { font-family: var(--font-body); background: var(--cream); color: var(--navy); }
+
+      .app { min-height: 100vh; display: flex; flex-direction: column; }
+      .main { flex: 1; }
+
+      /* NAV */
+      .nav {
+        background: var(--navy);
+        padding: 0 2rem;
+        display: flex; align-items: center; justify-content: space-between;
+        height: 68px;
+        position: sticky; top: 0; z-index: 100;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.25);
+      }
+      .nav-brand {
+        font-family: var(--font-display);
+        font-size: 1.35rem; color: var(--white);
+        letter-spacing: -0.01em; cursor: pointer;
+      }
+      .nav-brand span { color: var(--gold); }
+      .nav-links { display: flex; gap: 0.25rem; align-items: center; }
+      .nav-link {
+        color: rgba(255,255,255,0.75); font-size: 0.9rem; font-weight: 500;
+        padding: 0.45rem 0.9rem; border-radius: 8px; cursor: pointer;
+        transition: all 0.2s; border: none; background: none; font-family: var(--font-body);
+      }
+      .nav-link:hover { color: white; background: rgba(255,255,255,0.1); }
+      .nav-link.active { color: var(--gold); background: rgba(240,165,0,0.12); }
+      .nav-link.cta {
+        background: var(--gold); color: var(--navy); font-weight: 700;
+        padding: 0.45rem 1.1rem;
+      }
+      .nav-link.cta:hover { background: var(--gold-light); }
+
+      /* HERO */
+      .hero {
+        background: linear-gradient(135deg, var(--navy) 0%, #1a2e5a 60%, #1B4FD8 100%);
+        padding: 6rem 2rem 5rem;
+        text-align: center; position: relative; overflow: hidden;
+      }
+      .hero::before {
+        content: '';
+        position: absolute; inset: 0;
+        background: radial-gradient(ellipse at 70% 50%, rgba(27,79,216,0.35) 0%, transparent 70%);
+        pointer-events: none;
+      }
+      .hero-badge {
+        display: inline-flex; align-items: center; gap: 0.4rem;
+        background: rgba(240,165,0,0.15); border: 1px solid rgba(240,165,0,0.4);
+        color: var(--gold-light); font-size: 0.8rem; font-weight: 600;
+        padding: 0.35rem 1rem; border-radius: 99px; margin-bottom: 1.5rem;
+        letter-spacing: 0.05em; text-transform: uppercase;
+      }
+      .hero h1 {
+        font-family: var(--font-display); font-size: clamp(2.2rem, 5vw, 3.5rem);
+        color: white; line-height: 1.15; margin-bottom: 1.25rem; max-width: 720px; margin-inline: auto;
+      }
+      .hero h1 em { color: var(--gold); font-style: normal; }
+      .hero p {
+        color: rgba(255,255,255,0.72); font-size: 1.1rem; margin-bottom: 2.5rem;
+        max-width: 540px; margin-inline: auto; line-height: 1.7;
+      }
+      .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+      .btn-primary {
+        background: var(--gold); color: var(--navy); font-weight: 700;
+        padding: 0.85rem 2rem; border-radius: var(--radius); font-size: 1rem;
+        border: none; cursor: pointer; font-family: var(--font-body);
+        transition: all 0.2s; box-shadow: 0 4px 16px rgba(240,165,0,0.4);
+      }
+      .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(240,165,0,0.45); }
+      .btn-outline {
+        background: transparent; color: white; font-weight: 600;
+        padding: 0.85rem 2rem; border-radius: var(--radius); font-size: 1rem;
+        border: 1.5px solid rgba(255,255,255,0.35); cursor: pointer; font-family: var(--font-body);
+        transition: all 0.2s;
+      }
+      .btn-outline:hover { border-color: white; background: rgba(255,255,255,0.08); }
+
+      /* STATS BAR */
+      .stats-bar {
+        background: var(--white); border-bottom: 1px solid var(--border);
+        display: flex; justify-content: center; flex-wrap: wrap; gap: 0;
+      }
+      .stat-item {
+        padding: 1.5rem 3rem; text-align: center; border-right: 1px solid var(--border);
+        flex: 1; min-width: 140px;
+      }
+      .stat-item:last-child { border-right: none; }
+      .stat-num { font-family: var(--font-display); font-size: 2rem; color: var(--blue); font-weight: 900; }
+      .stat-label { font-size: 0.8rem; color: var(--slate); font-weight: 500; margin-top: 0.2rem; }
+
+      /* SECTIONS */
+      .section { padding: 5rem 2rem; }
+      .section-inner { max-width: 1100px; margin: auto; }
+      .section-tag {
+        display: inline-block; background: rgba(27,79,216,0.1);
+        color: var(--blue); font-size: 0.75rem; font-weight: 700;
+        padding: 0.3rem 0.9rem; border-radius: 99px; letter-spacing: 0.08em;
+        text-transform: uppercase; margin-bottom: 1rem;
+      }
+      .section-title {
+        font-family: var(--font-display); font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+        color: var(--navy); line-height: 1.2; margin-bottom: 1rem;
+      }
+      .section-sub { color: var(--slate); font-size: 1rem; line-height: 1.7; max-width: 560px; }
+
+      /* FEATURE CARDS */
+      .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+      .feature-card {
+        background: var(--white); border: 1px solid var(--border);
+        border-radius: var(--radius); padding: 2rem;
+        transition: all 0.25s; position: relative; overflow: hidden;
+      }
+      .feature-card::before {
+        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+        background: linear-gradient(90deg, var(--blue), var(--gold));
+        opacity: 0; transition: opacity 0.25s;
+      }
+      .feature-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+      .feature-card:hover::before { opacity: 1; }
+      .feature-icon {
+        width: 48px; height: 48px; border-radius: 12px;
+        background: linear-gradient(135deg, var(--blue), var(--blue-light));
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.3rem; margin-bottom: 1.2rem;
+      }
+      .feature-card h3 { font-weight: 700; font-size: 1.05rem; margin-bottom: 0.5rem; }
+      .feature-card p { color: var(--slate); font-size: 0.9rem; line-height: 1.65; }
+
+      /* COURSE CARDS */
+      .courses-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 3rem; }
+      .course-card {
+        background: var(--white); border: 1px solid var(--border);
+        border-radius: 16px; overflow: hidden; transition: all 0.25s;
+        box-shadow: var(--shadow);
+      }
+      .course-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+      .course-card-header { padding: 2rem 2rem 1.5rem; background: linear-gradient(135deg, var(--navy), #1a3060); }
+      .course-card-header h3 { font-family: var(--font-display); font-size: 1.5rem; color: white; margin-bottom: 0.4rem; }
+      .course-card-header p { color: rgba(255,255,255,0.65); font-size: 0.85rem; }
+      .course-badge {
+        display: inline-block; background: var(--gold); color: var(--navy);
+        font-size: 0.72rem; font-weight: 800; padding: 0.25rem 0.7rem;
+        border-radius: 99px; margin-bottom: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase;
+      }
+      .course-card-body { padding: 1.5rem 2rem 2rem; }
+      .course-subjects { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+      .subject-chip {
+        background: rgba(27,79,216,0.08); color: var(--blue);
+        font-size: 0.78rem; font-weight: 600; padding: 0.3rem 0.8rem; border-radius: 99px;
+        border: 1px solid rgba(27,79,216,0.15);
+      }
+      .course-price { font-family: var(--font-display); font-size: 1.8rem; color: var(--navy); font-weight: 900; }
+      .course-price span { font-family: var(--font-body); font-size: 0.85rem; color: var(--slate); font-weight: 400; }
+      .course-enroll {
+        display: block; width: 100%; margin-top: 1.25rem;
+        background: var(--blue); color: white; font-weight: 700;
+        padding: 0.8rem; border-radius: 10px; font-size: 0.95rem;
+        border: none; cursor: pointer; font-family: var(--font-body);
+        transition: all 0.2s; text-align: center;
+      }
+      .course-enroll:hover { background: var(--blue-light); transform: translateY(-1px); }
+      
+      input, select {
+        font-family: var(--font-body);
+      }
+    `;
+
+    function App() {
+      const { path, navigate } = useRouter();
+      
+      useEffect(() => {
+        if (!document.getElementById('app-styles')) {
+          const styleEl = document.createElement('style');
+          styleEl.id = 'app-styles';
+          styleEl.textContent = styles;
+          document.head.appendChild(styleEl);
+        }
+      }, []);
+
+      return (
+        <div className="app">
+          <nav className="nav">
+            <div className="nav-brand">PU <span>Elite</span></div>
+            <div className="nav-links">
+              <button className={`nav-link ${path === '#/' ? 'active' : ''}`} onClick={() => navigate('#/')}>Home</button>
+              <button className={`nav-link ${path === '#/streams' ? 'active' : ''}`} onClick={() => navigate('#/streams')}>Streams</button>
+              <button className={`nav-link ${path === '#/courses' ? 'active' : ''}`} onClick={() => navigate('#/courses')}>Classes</button>
+              <button className="nav-link cta" onClick={() => navigate('#/enroll')}>Enroll Now</button>
+            </div>
+          </nav>
+
+          <div className="main">
+            {path === '#/' && (
+              <>
+                <section className="hero">
+                  <div className="hero-badge">🎓 Ace Your Pre-University Exams</div>
+                  <h1>Master Science & Commerce <em>with Expert Guidance</em></h1>
+                  <p>Comprehensive PU tutoring classes for both Science and Commerce streams. Learn from experienced educators and excel in your board exams.</p>
+                  <div className="hero-btns">
+                    <button className="btn-primary">Browse Classes</button>
+                    <button className="btn-outline">Contact Us</button>
+                  </div>
+                </section>
+
+                <div className="stats-bar">
+                  <div className="stat-item">
+                    <div className="stat-num">15+</div>
+                    <div className="stat-label">Expert Teachers</div>
+                  </div>
+                  <div className="stat-item">
+                    <div className="stat-num">2000+</div>
+                    <div className="stat-label">Successful Students</div>
+                  </div>
+                  <div className="stat-item">
+                    <div className="stat-num">95%</div>
+                    <div className="stat-label">Pass Rate</div>
+                  </div>
+                </div>
+
+                <section className="section">
+                  <div className="section-inner">
+                    <div className="section-tag">Why Choose Us</div>
+                    <h2 className="section-title">Why PU Elite Stands Out?</h2>
+                    <div className="features-grid">
+                      <div className="feature-card">
+                        <div className="feature-icon">👨‍🏫</div>
+                        <h3>Qualified Teachers</h3>
+                        <p>Experienced educators with proven track record in PU exam preparation and board results.</p>
+                      </div>
+                      <div className="feature-card">
+                        <div className="feature-icon">📖</div>
+                        <h3>Curriculum Aligned</h3>
+                        <p>Classes strictly follow the PU board curriculum with focus on exam-oriented learning.</p>
+                      </div>
+                      <div className="feature-card">
+                        <div className="feature-icon">✅</div>
+                        <h3>High Success Rate</h3>
+                        <p>95% of our students score above 80% in board exams. Join the winning tradition.</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </>
+            )}
+
+            {path === '#/streams' && (
+              <section className="section">
+                <div className="section-inner">
+                  <h2 className="section-title">Our Streams</h2>
+                  <p className="section-sub">Choose your stream and excel with specialized guidance for Science and Commerce.</p>
+                  <div className="courses-grid" style={{marginTop: '3rem'}}>
+                    <div className="course-card">
+                      <div className="course-card-header" style={{background: 'linear-gradient(135deg, #0A4A8C, #1B70F0)'}}>
+                        <h3>Science Stream</h3>
+                        <p>For students pursuing STEM fields</p>
+                      </div>
+                      <div className="course-card-body">
+                        <div className="course-subjects">
+                          <span className="subject-chip">Physics</span>
+                          <span className="subject-chip">Chemistry</span>
+                          <span className="subject-chip">Biology</span>
+                          <span className="subject-chip">Maths</span>
+                        </div>
+                        <p style={{fontSize: '0.9rem', color: 'var(--slate)', marginBottom: '1rem'}}>Complete PU Science curriculum with lab practical guidance and problem-solving sessions.</p>
+                        <button className="course-enroll">Explore Science Classes</button>
+                      </div>
+                    </div>
+                    <div className="course-card">
+                      <div className="course-card-header" style={{background: 'linear-gradient(135deg, #8B4513, #D4A574)'}}>
+                        <h3>Commerce Stream</h3>
+                        <p>For business and economics aspirants</p>
+                      </div>
+                      <div className="course-card-body">
+                        <div className="course-subjects">
+                          <span className="subject-chip">Accountancy</span>
+                          <span className="subject-chip">Economics</span>
+                          <span className="subject-chip">Business St.</span>
+                          <span className="subject-chip">Maths</span>
+                        </div>
+                        <p style={{fontSize: '0.9rem', color: 'var(--slate)', marginBottom: '1rem'}}>PU Commerce classes with practical accounting case studies and economic analysis.</p>
+                        <button className="course-enroll">Explore Commerce Classes</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {path === '#/courses' && (
+              <section className="section">
+                <div className="section-inner">
+                  <h2 className="section-title">Our Classes</h2>
+                  <p className="section-sub">Comprehensive PU preparation classes across both streams</p>
+                  <div className="courses-grid">
+                    <div className="course-card">
+                      <div className="course-card-header" style={{background: 'linear-gradient(135deg, #0A4A8C, #1B70F0)'}}>
+                        <div className="course-badge">SCIENCE</div>
+                        <h3>Physics</h3>
+                        <p>Mechanics, Thermodynamics & More</p>
+                      </div>
+                      <div className="course-card-body">
+                        <div className="course-subjects">
+                          <span className="subject-chip">Mechanics</span>
+                          <span className="subject-chip">Optics</span>
+                          <span className="subject-chip">Modern Physics</span>
+                        </div>
+                        <div className="course-price">₹4000<span>/month</span></div>
+                        <button className="course-enroll">Enroll</button>
+                      </div>
+                    </div>
+                    <div className="course-card">
+                      <div className="course-card-header" style={{background: 'linear-gradient(135deg, #0A4A8C, #1B70F0)'}}>
+                        <div className="course-badge">SCIENCE</div>
+                        <h3>Chemistry</h3>
+                        <p>Organic, Inorganic & Physical</p>
+                      </div>
+                      <div className="course-card-body">
+                        <div className="course-subjects">
+                          <span className="subject-chip">Organic</span>
+                          <span className="subject-chip">Inorganic</span>
+                          <span className="subject-chip">Physical</span>
+                        </div>
+                        <div className="course-price">₹4000<span>/month</span></div>
+                        <button className="course-enroll">Enroll</button>
+                      </div>
+                    </div>
+                    <div className="course-card">
+                      <div className="course-card-header" style={{background: 'linear-gradient(135deg, #0A4A8C, #1B70F0)'}}>
+                        <div className="course-badge">SCIENCE</div>
+                        <h3>Biology</h3>
+                        <p>Botany, Zoology & Ecology</p>
+                      </div>
+                      <div className="course-card-body">
+                        <div className="course-subjects">
+                          <span className="subject-chip">Botany</span>
+                          <span className="subject-chip">Zoology</span>
+                          <span className="subject-chip">Ecology</span>
+                        </div>
+                        <div className="course-price">₹3500<span>/month</span></div>
+                        <button className="course-enroll">Enroll</button>
+                      </div>
+                    </div>
+                    <div className="course-card">
+                      <div className="course-card-header" style={{background: 'linear-gradient(135deg, #8B4513, #D4A574)'}}>
+                        <div className="course-badge">COMMERCE</div>
+                        <h3>Accountancy</h3>
+                        <p>Journal, Ledger & Financial Statements</p>
+                      </div>
+                      <div className="course-card-body">
+                        <div className="course-subjects">
+                          <span className="subject-chip">Fundamentals</span>
+                          <span className="subject-chip">Final Accounts</span>
+                          <span className="subject-chip">Ratios</span>
+                        </div>
+                        <div className="course-price">₹4000<span>/month</span></div>
+                        <button className="course-enroll">Enroll</button>
+                      </div>
+                    </div>
+                    <div className="course-card">
+                      <div className="course-card-header" style={{background: 'linear-gradient(135deg, #8B4513, #D4A574)'}}>
+                        <div className="course-badge">COMMERCE</div>
+                        <h3>Economics</h3>
+                        <p>Micro & Macro Economics</p>
+                      </div>
+                      <div className="course-card-body">
+                        <div className="course-subjects">
+                          <span className="subject-chip">Demand-Supply</span>
+                          <span className="subject-chip">Money & Banking</span>
+                          <span className="subject-chip">Income</span>
+                        </div>
+                        <div className="course-price">₹3500<span>/month</span></div>
+                        <button className="course-enroll">Enroll</button>
+                      </div>
+                    </div>
+                    <div className="course-card">
+                      <div className="course-card-header" style={{background: 'linear-gradient(135deg, #8B4513, #D4A574)'}}>
+                        <div className="course-badge">COMMERCE</div>
+                        <h3>Business Studies</h3>
+                        <p>Management & Entrepreneurship</p>
+                      </div>
+                      <div className="course-card-body">
+                        <div className="course-subjects">
+                          <span className="subject-chip">Org. Structure</span>
+                          <span className="subject-chip">Finance</span>
+                          <span className="subject-chip">Marketing</span>
+                        </div>
+                        <div className="course-price">₹3500<span>/month</span></div>
+                        <button className="course-enroll">Enroll</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {path === '#/enroll' && (
+              <section className="section">
+                <div className="section-inner">
+                  <h2 className="section-title">Enroll in PU Elite</h2>
+                  <p className="section-sub">Join 2000+ successful students. Limited seats available in each batch.</p>
+                  <div style={{maxWidth: '600px', margin: '3rem auto', background: 'var(--white)', padding: '2rem', borderRadius: 'var(--radius)', border: '1px solid var(--border)'}}>
+                    <div style={{marginBottom: '1.5rem'}}>
+                      <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: '600'}}>Full Name</label>
+                      <input type="text" placeholder="Your full name" style={{width: '100%', padding: '0.75rem', border: '1px solid var(--border)', borderRadius: '8px', boxSizing: 'border-box'}} />
+                    </div>
+                    <div style={{marginBottom: '1.5rem'}}>
+                      <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: '600'}}>Email</label>
+                      <input type="email" placeholder="your@email.com" style={{width: '100%', padding: '0.75rem', border: '1px solid var(--border)', borderRadius: '8px', boxSizing: 'border-box'}} />
+                    </div>
+                    <div style={{marginBottom: '1.5rem'}}>
+                      <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: '600'}}>Select Stream</label>
+                      <select style={{width: '100%', padding: '0.75rem', border: '1px solid var(--border)', borderRadius: '8px', boxSizing: 'border-box'}}>
+                        <option>Choose your stream...</option>
+                        <option>Science</option>
+                        <option>Commerce</option>
+                      </select>
+                    </div>
+                    <button className="btn-primary" style={{width: '100%'}}>Submit Enrollment</button>
+                  </div>
+                </div>
+              </section>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
